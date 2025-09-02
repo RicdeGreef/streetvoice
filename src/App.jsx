@@ -9,7 +9,7 @@ const HomeIcon = () => (
   </svg>
 );
 
-// --- GESIMULEERDE AI DATA ---
+// --- GESIMULEERDE AI DATA (voor als iemand skipt) ---
 const mockApiResponse = {
   id: 1,
   originalStory: "In de groepsapp werd een gemene foto van Alex gedeeld en iedereen lachte.",
@@ -31,15 +31,23 @@ export default function App() {
     setSubmittedStory(storyText);
     setStep('loading');
     setTimeout(() => {
+      // Hier zou de echte API call komen gebaseerd op storyText
       setApiResponse(mockApiResponse);
-      // NIEUWE FLOW: Ga eerst naar de keuze
       setStep('choice');
     }, 2000);
   };
 
+  const handleSkip = () => {
+    setStep('loading');
+    setTimeout(() => {
+      // Gebruik het standaard scenario als iemand skipt
+      setApiResponse(mockApiResponse);
+      setStep('choice');
+    }, 1500); // Iets kortere wachttijd voor skippen
+  };
+
   const handleMakeChoice = (choice) => {
     console.log("Gemaakte keuze:", choice);
-    // NIEUWE FLOW: Na de keuze, toon de perspectieven
     setStep('perspectives');
   };
 
@@ -51,13 +59,12 @@ export default function App() {
 
   const renderStep = () => {
     switch (step) {
-      case 'submission': return <SubmissionScreen onSubmit={handleStorySubmit} />;
+      case 'submission': return <SubmissionScreen onSubmit={handleStorySubmit} onSkip={handleSkip} />;
       case 'loading': return <LoadingScreen />;
-      // De volgorde is hier aangepast
       case 'choice': return <ChoiceScreen scenario={apiResponse.bystanderScenario} onChoice={handleMakeChoice} />;
       case 'perspectives': return <PerspectiveScreen response={apiResponse} onContinue={() => setStep('feedback')} />;
       case 'feedback': return <FeedbackScreen feedback={apiResponse.communityData} onRestart={handleRestart} />;
-      default: return <SubmissionScreen onSubmit={handleStorySubmit} />;
+      default: return <SubmissionScreen onSubmit={handleStorySubmit} onSkip={handleSkip} />;
     }
   };
 
@@ -86,27 +93,33 @@ function Header({ onHomeClick }) {
   );
 }
 
-function SubmissionScreen({ onSubmit }) {
+function SubmissionScreen({ onSubmit, onSkip }) {
   const [story, setStory] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (story.trim()) onSubmit(story);
+    if (story.trim()) {
+        onSubmit(story);
+    }
+    // De 'else' is niet nodig, want de knop is uitgeschakeld.
   };
 
   return (
     <div className="screen animate-fade-in">
-      <h2>Deel anoniem een klassenverhaal</h2>
-      <p className="subtitle">Beschrijf anoniem een situatie uit jouw klas. De AI maakt er een neutraal scenario van dat klassikaal besproken kan worden.</p>
+      <h2>Deel anoniem een ervaring</h2>
+      <p className="subtitle">Beschrijf een situatie die jij hebt meegemaakt of gezien. De AI maakt er een neutraal scenario van voor de klas.</p>
       <form onSubmit={handleSubmit} className="submission-form">
         <textarea
           value={story}
           onChange={(e) => setStory(e.target.value)}
-          placeholder="Bijv: 'In de groepsapp werd een vervelende foto gedeeld...'"
+          placeholder="Bijv: 'Op social media zag ik dat er iemand werd buitengesloten...'"
         ></textarea>
         <div className="form-footer">
-          <button type="submit" disabled={!story.trim()} className="button-primary">
+          <button type="submit" className="button-primary" disabled={!story.trim()}>
             Verzenden voor scenario
+          </button>
+          <button type="button" onClick={onSkip} className="button-secondary">
+            Ik heb geen verhaal, ga door
           </button>
         </div>
       </form>
@@ -128,7 +141,7 @@ function PerspectiveScreen({ response, onContinue }) {
   return (
     <div className="screen animate-fade-in">
       <h2>De perspectieven</h2>
-      <p className="story-quote">Jouw anonieme verhaal: "{response.originalStory}"</p>
+      {response.originalStory && <p className="story-quote">Gebaseerd op het anonieme verhaal: "{response.originalStory}"</p>}
       <p className="subtitle">Nadat je een keuze hebt gemaakt, is het goed om te zien hoe anderen de situatie kunnen ervaren.</p>
       <div className="perspectives-container">
         {response.perspectives.map(p => (
@@ -143,7 +156,7 @@ function PerspectiveScreen({ response, onContinue }) {
       </div>
        <div className="screen-footer">
             <button onClick={onContinue} className="button-primary">
-              Bekijk de community feedback
+              Bekijk de klassen-feedback
             </button>
         </div>
     </div>
@@ -174,7 +187,7 @@ function FeedbackScreen({ feedback, onRestart }) {
         <div className="percentage-circle" style={{'--percentage': feedback.respectfulPercentage}}>
             <p>{feedback.respectfulPercentage}%</p>
         </div>
-        <p className="feedback-text">van de klas koos voor respectvol gedrag.</p>
+        <p className="feedback-text">van de deelnemers koos voor respectvol gedrag.</p>
         <p className="subtitle">Samen maken we de norm. Dit is een startpunt voor een klassengesprek.</p>
       </div>
        <div className="screen-footer">

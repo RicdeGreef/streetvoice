@@ -105,18 +105,18 @@
 
 .button-secondary {
   width: 100%;
-  background-color: #4b5563;
-  color: white;
+  background-color: #f3f4f6;
+  color: #374151;
   font-weight: bold;
   padding: 0.75rem;
   border-radius: 0.5rem;
-  border: none;
+  border: 1px solid #d1d5db;
   cursor: pointer;
   transition: background-color 0.2s;
 }
 
 .button-secondary:hover {
-  background-color: #374151;
+  background-color: #e5e7eb;
 }
 
 
@@ -138,7 +138,16 @@
   box-sizing: border-box; /* Zorgt dat padding binnen de width valt */
 }
 
-.form-footer, .screen-footer {
+/* DE FIX ZIT HIER */
+.form-footer {
+  margin-top: auto;
+  padding-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem; /* Dit voegt ruimte toe TUSSEN de knoppen */
+}
+
+.screen-footer {
   margin-top: auto;
   padding-top: 1rem;
 }
