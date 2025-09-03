@@ -18,7 +18,7 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  min-height: 650px;
+  height: 700px; /* Aangepaste hoogte zodat alles past */
 }
 
 .app-main {
@@ -30,7 +30,7 @@
 
 /* --- Header --- */
 .header {
-  padding: 1rem 1.5rem;
+  padding: 0.5rem 1.5rem; /* Padding boven/onder is verkleind */
   border-bottom: 1px solid #e5e7eb;
   display: flex;
   justify-content: space-between;
@@ -70,14 +70,14 @@
   font-size: 1.25rem;
   font-weight: 600;
   color: #374151;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.25rem; /* Was 0.5rem */
   text-align: center;
 }
 
 .screen .subtitle {
   font-size: 0.875rem;
   color: #6b7280;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.75rem; /* Was 1rem */
   text-align: center;
 }
 
@@ -147,10 +147,17 @@
     border: 1px solid #d1d5db;
 }
 
-/* --- RATING SCHERM --- */
+/* --- RATING SCHERM (DE FIX ZIT HIER) --- */
+.situation-image {
+    width: 100%;
+    max-width: 200px; 
+    margin: 0 auto 0.75rem; /* Was 1rem */
+    border-radius: 0.5rem;
+    border: 1px solid #e5e7eb;
+}
+
 .rating-container {
     text-align: center;
-    margin: auto 0;
 }
 .rating-container h3 {
     font-size: 1.125rem;
@@ -160,18 +167,18 @@
 .rating-question {
     color: #6b7280;
     font-size: 0.875rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0.25rem; /* Was 0.5rem */
 }
 
 /* --- Slider Styling --- */
 .slider-container {
-    padding: 1rem 0;
+    padding: 0.25rem 0; /* Was 0.5rem */
 }
 .slider-value {
     font-size: 2.5rem;
     font-weight: bold;
     color: #2563eb;
-    margin-bottom: 1rem;
+    margin-bottom: 0.25rem; /* Was 0.5rem */
     display: block;
 }
 .slider {
